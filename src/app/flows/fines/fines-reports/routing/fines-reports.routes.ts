@@ -14,6 +14,7 @@ import { finesReportsReportInstancesResolver } from './resolvers/fines-reports-r
 import { finesReportsBusinessUnitsResolver } from './resolvers/fines-reports-business-units/fines-reports-business-units.resolver';
 import { finesReportsReportHeadingResolver } from './resolvers/fines-reports-report-heading/fines-reports-report-heading.resolver';
 import { finesReportsCreateStateGuard } from './guards/fines-reports-create-state-guard/fines-reports-create-state.guard';
+import { finesReportsReportInstanceResolver } from './resolvers/fines-reports-report-instance/fines-reports-report-instance.resolver';
 
 export const routing: Routes = [
   {
@@ -96,6 +97,7 @@ export const routing: Routes = [
         },
         resolve: {
           title: TitleResolver,
+          reportSummary: finesReportsReportInstanceResolver,
         },
       },
       {

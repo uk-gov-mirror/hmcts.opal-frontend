@@ -7,6 +7,7 @@ import { FINES_REPORTS_ROUTING_PATHS } from './constants/fines-reports-routing-p
 import { FINES_REPORTS_ROUTING_TITLES } from './constants/fines-reports-routing-titles.constant';
 import { finesReportsBusinessUnitsResolver } from './resolvers/fines-reports-business-units/fines-reports-business-units.resolver';
 import { finesReportsReportHeadingResolver } from './resolvers/fines-reports-report-heading/fines-reports-report-heading.resolver';
+import { finesReportsReportInstanceResolver } from './resolvers/fines-reports-report-instance/fines-reports-report-instance.resolver';
 import { finesReportsReportMetadataResolver } from './resolvers/fines-reports-report-metadata/fines-reports-report-metadata.resolver';
 import { finesReportsCreateStateGuard } from './guards/fines-reports-create-state-guard/fines-reports-create-state.guard';
 
@@ -88,24 +89,23 @@ describe('finesReports routes', () => {
     });
   });
 
-  it('should expose a report summary stub route', () => {
+  it('should resolve the report summary route', () => {
     const reportRoute = routing.find((route) => route.path === ':reportTypeId');
     const reportSummaryRoute = reportRoute?.children?.find(
       (route) => route.path === `${FINES_REPORTS_ROUTING_PATHS.children.reportSummary}/:reportInstanceId`,
     );
 
-    expect(reportSummaryRoute).toEqual(
-      expect.objectContaining({
-        path: `${FINES_REPORTS_ROUTING_PATHS.children.reportSummary}/:reportInstanceId`,
-        data: {
-          title: FINES_REPORTS_ROUTING_TITLES.children.reportSummary,
-        },
-        resolve: expect.objectContaining({
-          title: TitleResolver,
-        }),
-      }),
-    );
-    expect(reportSummaryRoute?.loadComponent).toEqual(expect.any(Function));
+    expect(reportSummaryRoute).toEqual({
+      path: `${FINES_REPORTS_ROUTING_PATHS.children.reportSummary}/:reportInstanceId`,
+      loadComponent: expect.any(Function),
+      data: {
+        title: FINES_REPORTS_ROUTING_TITLES.children.reportSummary,
+      },
+      resolve: {
+        title: TitleResolver,
+        reportSummary: finesReportsReportInstanceResolver,
+      },
+    });
   });
 
   it('should resolve summary-list and Select business units business units using report permissions', () => {
